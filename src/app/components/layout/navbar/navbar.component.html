@@ -1,0 +1,31 @@
+<div class="flex items-center justify-between bg-gray-800 py-5 px-5 md:px-5 lg:px-10 h-[4.5rem] fixed w-full">
+    <!-- Brand -->
+    <div class="flex gap-1 items-center">
+        <img src="../../../../assets/logo.png" alt="logo" class="h-[2.5rem]">
+        <p class="font-lora text-gray-100 font-semibold text-2xl">
+            Kisah Misterius
+        </p>
+
+        <p-divider layout="vertical"></p-divider>
+
+        <!-- Menu -->
+        <div class="flex items-center gap-5">
+            <span class="text-gray-100 cursor-pointer">
+                Home
+            </span>
+
+            @for (item of BlogCategory$ | async; track $index) {
+            <span class="text-gray-100 cursor-pointer">
+                {{ item.blog_category }}
+            </span>
+            }
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="flex pr-10">
+        <span class="cursor-pointer text-white">
+            <i class="pi pi-search"></i>
+        </span>
+    </div>
+</div>

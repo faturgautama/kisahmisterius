@@ -1,0 +1,222 @@
+<app-dashboard>
+    <div class="flex w-full md:flex-row flex-col items-start gap-5">
+        <!-- Menu -->
+        <div
+            class="w-full md:h-full md:w-3/12 flex flex-col gap-0 pr-5 border border-y-0 border-l-0 border-r-0 md:border-r border-dashed border-gray-300">
+            <p class="text-xl font-medium text-gray-800">
+                Daftar Menu
+            </p>
+
+            <p class="text-sm text-gray-700">
+                Pilih menu dibawah ini
+            </p>
+            <div
+                class="flex flex-row md:flex-col gap-3 mt-2 pt-3 border-t border-b-0 border-x-0 border-gray-300 border-dashed">
+                <p-button [severity]="PageState == 'category' ? 'info' : 'secondary'" label="Kategori Blog"
+                    (onClick)="PageState = 'category'" styleClass="p-button-sm w-full">
+                </p-button>
+
+                <p-button [severity]="PageState == 'blog' ? 'info' : 'secondary'" label="Daftar Blog"
+                    (onClick)="PageState = 'blog'" styleClass="p-button-sm w-full">
+                </p-button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="w-full md:9/12 flex flex-col">
+
+            <!-- Kategori Blog -->
+            @if (PageState == 'category') {
+            <div class="grid w-full">
+                <div class="flex w-full flex-row justify-between mb-3">
+                    <div class="flex flex-col">
+                        <p class="text-xl font-medium text-gray-800">
+                            Kategori Blog
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            Data kategori blog
+                        </p>
+                    </div>
+
+                    <p-button styleClass="p-button-sm" severity="info" label="Tambah"
+                        (onClick)="ShowDialogFormBlogCategory = true">
+                    </p-button>
+                </div>
+
+                <p-table [value]="BlogCategoryDatasource" styleClass="p-datatable-sm">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="text-sm">#</th>
+                            <th class="text-sm">Kategori</th>
+                            <th class="text-sm text-center">Aksi</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-product let-i="rowIndex">
+                        <tr>
+                            <td class="text-sm">{{ i + 1 }}</td>
+                            <td class="text-sm">{{ product.blog_category }}</td>
+                            <td class="text-sm">
+                                <div class="flex gap-4 w-full justify-center">
+                                    <span (click)="handleClickEditCategory(product)"
+                                        class="px-2 py-1 rounded-md bg-yellow-200 text-yellow-600 font-semibold cursor-pointer">
+                                        <i class="pi pi-pencil" style="font-size: 12px"></i>
+                                    </span>
+
+                                    <span (click)="handleDeleteBlogCategory(product.id_blog_category)"
+                                        class="px-2 py-1 rounded-md bg-red-200 text-red-600 font-semibold cursor-pointer">
+                                        <i class="pi pi-trash" style="font-size: 12px"></i>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <p-dialog [header]="FormState == 'insert' ? 'Tambah Kategori'  : 'Edit Kategori' " [modal]="true"
+                    [(visible)]="ShowDialogFormBlogCategory" [style]="{ width: '40rem' }">
+                    <div [formGroup]="FormBlogCategory" class="flex flex-col gap-1 mb-3">
+                        <label for="username" class="font-semibold text-gray-700 text-sm">
+                            Kategori
+                        </label>
+
+                        <input pInputText formControlName="blog_category" class="p-inputtext-sm w-full" />
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <p-button label="Tutup" severity="secondary" styleClass="p-button-sm"
+                            (onClick)="ShowDialogFormBlogCategory = false">
+                        </p-button>
+
+                        <p-button *ngIf="FormState == 'insert'" label="Simpan" styleClass="p-button-sm"
+                            (onClick)="handleSaveBlogCategory(FormBlogCategory.value)">
+                        </p-button>
+
+                        <p-button *ngIf="FormState == 'update'" label="Update" styleClass="p-button-sm"
+                            (onClick)="handleUpdateBlogCategory(FormBlogCategory.value)">
+                        </p-button>
+                    </div>
+                </p-dialog>
+            </div>
+            }
+
+            <!-- Blog -->
+            @if (PageState == 'blog') {
+            <div class="grid w-full">
+                <div class="flex w-full flex-row justify-between mb-3">
+                    <div class="flex flex-col">
+                        <p class="text-xl font-medium text-gray-800">
+                            Blog
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            Data blog
+                        </p>
+                    </div>
+
+                    <p-button styleClass="p-button-sm" severity="info" label="Tambah"
+                        (onClick)="ShowDialogFormBlog = true">
+                    </p-button>
+                </div>
+
+                <p-table [value]="BlogDatasource" styleClass="p-datatable-sm">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="text-sm">#</th>
+                            <th class="text-sm">Kategori</th>
+                            <th class="text-sm">Judul</th>
+                            <th class="text-sm">Waktu Entry</th>
+                            <th class="text-sm text-center">Aksi</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-product let-i="rowIndex">
+                        <tr>
+                            <td class="text-sm">{{ i + 1 }}</td>
+                            <td class="text-sm">{{ product.blog_category }}</td>
+                            <td class="text-sm">
+                                <div class="flex gap-4 w-full justify-center">
+                                    <span (click)="handleClickEdit(product)"
+                                        class="px-2 py-1 rounded-md bg-yellow-200 text-yellow-600 font-semibold cursor-pointer">
+                                        <i class="pi pi-pencil" style="font-size: 12px"></i>
+                                    </span>
+
+                                    <span (click)="handleDeleteBlog(product.id_blog)"
+                                        class="px-2 py-1 rounded-md bg-red-200 text-red-600 font-semibold cursor-pointer">
+                                        <i class="pi pi-trash" style="font-size: 12px"></i>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <p-dialog [header]="FormState == 'insert' ? 'Tambah Blog'  : 'Edit Blog' " [modal]="true"
+                    [(visible)]="ShowDialogFormBlog" [style]="{ width: '50rem' }">
+                    <div [formGroup]="FormBlog" class="flex flex-col w-full mb-3">
+                        <!-- Kategori -->
+                        <div class="flex flex-col gap-1 mb-3">
+                            <label for="username" class="font-semibold text-gray-700 text-sm">
+                                Kategori
+                            </label>
+
+                            <p-dropdown styleClass="p-inputtext-sm w-full" [options]="BlogCategoryDatasource"
+                                optionValue="id_blog_category" optionLabel="blog_category" [filter]="true"
+                                appendTo="body" formControlName="id_blog_category">
+                            </p-dropdown>
+                        </div>
+
+                        <!-- Judul -->
+                        <div class="flex flex-col gap-1 mb-3">
+                            <label for="username" class="font-semibold text-gray-700 text-sm">
+                                Judul
+                            </label>
+
+                            <input pInputText formControlName="title" class="p-inputtext-sm w-full" />
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex flex-col gap-1 mb-3">
+                            <label for="username" class="font-semibold text-gray-700 text-sm">
+                                Isi
+                            </label>
+
+                            <p-editor formControlName="content" [style]="{ height: '320px' }" />
+                        </div>
+
+                        <!-- Lokasi -->
+                        <div class="flex flex-col gap-1 mb-3">
+                            <label for="username" class="font-semibold text-gray-700 text-sm">
+                                Lokasi
+                            </label>
+
+                            <input pInputText formControlName="location" class="p-inputtext-sm w-full" />
+                        </div>
+
+                        <!-- Gambar -->
+                        <div class="flex flex-col gap-1 mb-3">
+                            <label for="username" class="font-semibold text-gray-700 text-sm">
+                                Gambar
+                            </label>
+
+                            <input pInputText formControlName="location" class="p-inputtext-sm w-full" />
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <p-button label="Tutup" severity="secondary" styleClass="p-button-sm"
+                            (onClick)="ShowDialogFormBlog = false">
+                        </p-button>
+
+                        <p-button *ngIf="FormState == 'insert'" label="Simpan" styleClass="p-button-sm"
+                            (onClick)="handleSaveBlog(FormBlog.value)">
+                        </p-button>
+
+                        <p-button *ngIf="FormState == 'update'" label="Update" styleClass="p-button-sm"
+                            (onClick)="handleUpdateBlog(FormBlog.value)">
+                        </p-button>
+                    </div>
+                </p-dialog>
+            </div>
+            }
+        </div>
+    </div>
+</app-dashboard>

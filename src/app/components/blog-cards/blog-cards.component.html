@@ -1,0 +1,7 @@
+<div class="grid w-full p-3 bg-white shadow-md rounded-md">
+    @if (props.image) {
+    <img [src]="props.image" alt="blog_image" class="h-[4rem] w-full rounded-lg">
+    } @else {
+    <div class="bg-gray-100 rounded-lg h-[4rem] w-full flex"></div>
+    }
+</div>

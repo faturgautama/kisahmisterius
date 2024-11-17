@@ -23,8 +23,8 @@ export class HttpService {
             .pipe(
                 map((result) => {
                     // ** Error 200
-                    if (!result.status) {
-                        this.handleError200(result.message);
+                    if (!result) {
+                        this.handleError200(result);
                     }
 
                     this.ShowLoading$.next(false);
@@ -47,7 +47,7 @@ export class HttpService {
                 map((result) => {
                     // ** Error 200
                     if (!result.status) {
-                        this.handleError200(result.message);
+                        this.handleError200(result);
                     }
 
                     this.ShowLoading$.next(false);
@@ -69,8 +69,8 @@ export class HttpService {
             .pipe(
                 map((result) => {
                     // ** Error 200
-                    if (!result.status) {
-                        this.handleError200(result.message);
+                    if (!result) {
+                        this.handleError200(result);
                     }
 
                     this.ShowLoading$.next(false);
@@ -91,11 +91,6 @@ export class HttpService {
             .delete<any>(url)
             .pipe(
                 map((result) => {
-                    // ** Error 200
-                    if (!result.status) {
-                        this.handleError200(result.message);
-                    }
-
                     this.ShowLoading$.next(false);
                     return result;
                 }),
@@ -107,19 +102,13 @@ export class HttpService {
             )
     }
 
-    private handleError200(message: string[]) {
+    private handleError200(message: string) {
         this._messageService.clear();
-
-        for (const item of message) {
-            this._messageService.add({ severity: 'error', summary: 'Oops', detail: item });
-        }
+        this._messageService.add({ severity: 'error', summary: 'Oops', detail: message });
     }
 
     private handleError(error: HttpErrorResponse) {
         this._messageService.clear();
-
-        for (const item of error.error.message) {
-            this._messageService.add({ severity: 'error', summary: 'Oops', detail: item });
-        }
+        this._messageService.add({ severity: 'error', summary: 'Oops', detail: error.message });
     }
 }

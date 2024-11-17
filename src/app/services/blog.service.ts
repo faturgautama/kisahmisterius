@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { HttpService } from './http.service';
 
@@ -16,23 +16,26 @@ export class BlogService {
 
     getAll(): Observable<any> {
         return this._httpService
-            .getRequest(`${environment.webApiUrl}/blog/GetAll`)
+            .getRequest(`${environment.webApiUrl}/blog.json`)
             .pipe(
-                tap((result) => {
-                    this.Blog$.next(result.data)
-                })
+                map((obj: any) =>
+                    Object.entries(obj).map(([key, val]) => ({
+                        ...val as any,
+                        id_blog: key
+                    }))
+                )
             )
     }
 
     create(payload: any): Observable<any> {
-        return this._httpService.postRequest(`${environment.webApiUrl}/blog/Create`, payload)
+        return this._httpService.postRequest(`${environment.webApiUrl}/blog.json`, payload)
     }
 
     update(payload: any): Observable<any> {
-        return this._httpService.putRequest(`${environment.webApiUrl}/blog/Update`, payload)
+        return this._httpService.putRequest(`${environment.webApiUrl}/blog/${payload.id_blog}.json`, payload)
     }
 
     delete(id_blog: any): Observable<any> {
-        return this._httpService.putRequest(`${environment.webApiUrl}/blog/Delete/${id_blog}`, null)
+        return this._httpService.deleteRequest(`${environment.webApiUrl}/blog/${id_blog}.json`)
     }
 }

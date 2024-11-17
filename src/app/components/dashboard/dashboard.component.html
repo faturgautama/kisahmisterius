@@ -1,1 +1,24 @@
-<p>dashboard works!</p>
+<div class="grid w-full bg-gray-200">
+    <div class="flex items-center justify-between bg-gray-800 py-5 px-5 md:px-5 lg:px-10 h-[4.5rem] w-full">
+        <!-- Brand -->
+        <div class="flex gap-1 items-center">
+            <img src="../../../../assets/logo.png" alt="logo" class="h-[2.5rem]">
+            <p class="font-lora text-gray-100 font-semibold text-2xl">
+                Kisah Misterius
+            </p>
+        </div>
+
+        <!-- Sign Out -->
+        <div class="flex pr-10">
+            <span class="cursor-pointer text-white">
+                <i class="pi pi-sign-out"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="grid w-full p-4" style="height: calc(100vh - 4.5rem);">
+        <div class="grid w-full h-full bg-white rounded-md p-3 shadow-md">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

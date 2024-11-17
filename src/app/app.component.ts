@@ -11,6 +11,8 @@ import { BlogCategoryService } from './services/blog-category.service';
 import { BlogService } from './services/blog.service';
 import { Subject, takeUntil } from 'rxjs';
 import { environment } from '../environments/environment.prod';
+import { LoadingComponent } from './components/loading/loading.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-root',
@@ -18,14 +20,15 @@ import { environment } from '../environments/environment.prod';
     imports: [
         RouterOutlet,
         CommonModule,
-        // BrowserAnimationsModule,
         HttpClientModule,
         ToastModule,
-        ProgressBarModule
+        ProgressBarModule,
+        LoadingComponent,
     ],
     providers: [
         BlogService,
-        BlogCategoryService
+        BlogCategoryService,
+        MessageService,
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
@@ -43,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         // AOS.init();
-        this.getAllData();
+        // this.getAllData();
     }
 
     ngOnDestroy(): void {

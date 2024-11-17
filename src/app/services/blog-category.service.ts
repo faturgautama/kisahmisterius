@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
 @Injectable({
@@ -16,23 +16,26 @@ export class BlogCategoryService {
 
     getAll(): Observable<any> {
         return this._httpService
-            .getRequest(`${environment.webApiUrl}/blog-category/GetAll`)
+            .getRequest(`${environment.webApiUrl}/blogCategory.json`)
             .pipe(
-                tap((result) => {
-                    this.BlogCategory$.next(result.data)
-                })
+                map((obj: any) =>
+                    Object.entries(obj).map(([key, val]) => ({
+                        ...val as any,
+                        id_blog_category: key
+                    }))
+                )
             )
     }
 
     create(payload: any): Observable<any> {
-        return this._httpService.postRequest(`${environment.webApiUrl}/blog-category/Create`, payload)
+        return this._httpService.postRequest(`${environment.webApiUrl}/blogCategory.json`, payload)
     }
 
     update(payload: any): Observable<any> {
-        return this._httpService.putRequest(`${environment.webApiUrl}/blog-category/Update`, payload)
+        return this._httpService.putRequest(`${environment.webApiUrl}/blogCategory/${payload.id_blog_category}.json`, payload)
     }
 
     delete(id_blog_category: any): Observable<any> {
-        return this._httpService.putRequest(`${environment.webApiUrl}/blog-category/Delete/${id_blog_category}`, null)
+        return this._httpService.deleteRequest(`${environment.webApiUrl}/blogCategory/${id_blog_category}.json`)
     }
 }

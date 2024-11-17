@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    webApiUrl: 'http://localhost:3000'
+    webApiUrl: 'https://kisahmisterius2024-default-rtdb.asia-southeast1.firebasedatabase.app'
 };
 
 /*

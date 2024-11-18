@@ -1,16 +1,46 @@
 <div class="flex items-center justify-between bg-gray-800 py-5 px-5 md:px-5 lg:px-10 h-[4.5rem] fixed w-full">
     <!-- Brand -->
     <div class="flex gap-1 items-center">
+        <span class="flex md:hidden mr-5 cursor-pointer" (click)="ShowSidebar = true">
+            <i class="pi pi-bars text-white"></i>
+        </span>
+
         <img src="../../../../assets/logo.png" alt="logo" class="h-[2.5rem]">
         <p class="font-lora text-gray-100 font-semibold text-2xl">
             Kisah Misterius
         </p>
     </div>
 
+    <div class="hidden md:flex gap-10 pr-[10%]">
+        <span class="text-gray-50 text-base cursor-pointer" (click)="handleClickCategory()">
+            Beranda
+        </span>
+
+        <span *ngFor="let item of BlogCategory" class="text-gray-50 text-base cursor-pointer"
+            (click)="handleClickCategory(item.blog_category)">
+            {{ item.blog_category }}
+        </span>
+    </div>
+
     <!-- Search -->
-    <div class="flex pr-10">
+    <div class="hidden md:flex pr-10">
         <span class="cursor-pointer text-white">
             <i class="pi pi-search"></i>
         </span>
     </div>
 </div>
+
+<p-sidebar [(visible)]="ShowSidebar">
+    <p class="font-lora text-lg mb-5 font-semibold">Kisah Misterius</p>
+
+    <div class="flex flex-col gap-2">
+        <span class="text-gray-700 text-base cursor-pointer" (click)="handleClickCategory()">
+            Beranda
+        </span>
+
+        <span *ngFor="let item of BlogCategory" class="text-gray-700 text-base cursor-pointer"
+            (click)="handleClickCategory(item.blog_category)">
+            {{ item.blog_category }}
+        </span>
+    </div>
+</p-sidebar>

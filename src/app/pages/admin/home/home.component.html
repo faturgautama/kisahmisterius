@@ -154,7 +154,7 @@
                 </p-table> -->
 
                 <!-- Card -->
-                <div class="grid grid-cols-4">
+                <div class="grid grid-cols-4 gap-3">
                     @for (item of BlogDatasource; track $index) {
                     <div class="grid w-full">
                         <app-blog-cards [props]="item" (onClick)="handleClickEdit(item)"></app-blog-cards>
@@ -174,7 +174,7 @@
 
                             <p-dropdown styleClass="p-inputtext-sm w-full" [options]="BlogCategoryDatasource"
                                 optionValue="id_blog_category" optionLabel="blog_category" [filter]="true"
-                                appendTo="body" formControlName="id_blog_category">
+                                appendTo="body" formControlName="id_blog_category" [autoDisplayFirst]="false">
                             </p-dropdown>
                         </div>
 

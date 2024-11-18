@@ -1,5 +1,46 @@
 <app-landing>
-    <div class="flex w-full h-[100vh] pt-[5rem] px-10 md:px-20 lg:px-20">
-        <p>beranda works!</p>
+    <!-- Banner -->
+    <div
+        class="flex flex-col gap-2 w-full items-center justify-center h-[18rem] md:h-[20rem] pt-[5rem] px-10 md:px-20 lg:px-20 bg-gray-700">
+        <p class="text-white text-4xl md:text-6xl font-lora">
+            Kisah Misterius
+        </p>
+        <p class="text-gray-300 text-base md:text-lg">
+            Short Description about Kisah Misterius
+        </p>
     </div>
+
+    <!-- Card -->
+    <div class="flex flex-col w-full px-10 md:px-20 lg:px-20 pt-10">
+        <div class="flex flex-col md:flex-row justify-between mb-10">
+            <div class="flex flex-col">
+                <p class="text-gray-800 text-xl font-medium font-lora">
+                    Kisah dan tulisan {{ Params ? Params : 'terbaru' }}
+                </p>
+                <p class="text-gray-700 text-sm">
+                    Temukan kisah dan tulisan {{ Params ? Params : 'terbaru' }}
+                </p>
+            </div>
+
+            <div class="w-full md:w-4/12 mt-1 md:mt-0">
+                <input #Cari pInputText class="p-inputtext-sm w-full" placeholder="Cari berdasarkan judul"
+                    (keyup.enter)="getBlog('', Cari.value)">
+            </div>
+        </div>
+
+        <div *ngIf="Blog.length" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            @for (item of Blog; track $index) {
+            <div class="grid w-full">
+                <app-blog-cards [props]="item" (onClick)="handleClickBlog($event)"></app-blog-cards>
+            </div>
+            }
+        </div>
+
+        <div *ngIf="!Blog.length" class="flex flex-row justify-center mb-20">
+            <p class="text-gray-700 text-sm mb-10">
+                Tidak ada kisah dan tulisan disini...
+            </p>
+        </div>
+    </div>
+
 </app-landing>

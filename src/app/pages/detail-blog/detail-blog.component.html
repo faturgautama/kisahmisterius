@@ -1,1 +1,45 @@
-<p>detail-blog works!</p>
+<app-landing *ngIf="Blog as blog">
+    <!-- Banner -->
+    <div
+        class="flex flex-col gap-2 w-full items-center justify-center h-[15rem] md:h-[20rem] pt-[5rem] px-10 md:px-20 lg:px-20 bg-gray-700">
+        <p class="text-white text-3xl font-lora">
+            {{ blog.title }}
+        </p>
+        <p class="text-gray-300 text-sm">
+            {{ blog.blog_category }}
+        </p>
+    </div>
+
+    <div class="flex md:flex-row flex-col w-full px-10 md:px-32 lg:px-32 pt-10">
+        <div class="w-full md:w-9/12 flex flex-col">
+            <p class="text-lg text-gray-800 font-medium">
+                {{ blog.title }}
+            </p>
+
+            <p class="text-sm text-gray-600 mb-2">
+                {{ blog.location }}, {{ blog.created_at | date: 'dd-MM-yyyy HH:mm' }}
+            </p>
+
+            <img [src]="blog.image" alt="image" class="h-[20rem] w-auto mx-auto mb-3">
+
+            <p class="text-sm text-gray-700" [innerHTML]="blog.content"></p>
+        </div>
+
+        <div class="w-full md:w-3/12 flex flex-col md:mt-0 mt-10">
+            <p
+                class="text-gray-700 text-base font-semibold mb-3 pb-3 border-b border-t-0 border-x-0 border-blue-400 border-solid">
+                Baca Lainnya
+            </p>
+
+            @for (item of OtherBlogs; track $index) {
+            <div class="flex w-full gap-2 cursor-pointer" (click)="handleClickOtherBlog(item)">
+                <img [src]="item.image" alt="otherBlogImage" class="w-[4rem] h-[4rem] object-cover object-center">
+
+                <p class="text-sm font-medium">
+                    {{ item.title }}
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+</app-landing>

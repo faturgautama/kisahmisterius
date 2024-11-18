@@ -19,16 +19,58 @@ export class BlogService {
             .getRequest(`${environment.webApiUrl}/blog.json`)
             .pipe(
                 map((obj: any) => {
+                    let result = [];
+
                     if (obj) {
-                        return Object.entries(obj).map(([key, val]) => ({
+                        result = Object.entries(obj).map(([key, val]) => ({
                             ...val as any,
                             id_blog: key
-                        }))
-                    } else {
-                        return [];
-                    }
+                        }));
+
+                    };
+
+                    return result;
                 })
             )
+    }
+
+    getBlog(blog_category?: string, title?: string): Observable<any> {
+        return this._httpService
+            .getRequest(`${environment.webApiUrl}/blog.json`)
+            .pipe(
+                map((obj: any) => {
+                    let result = [];
+
+                    if (obj) {
+                        const data = Object.entries(obj).map(([key, val]) => ({
+                            ...val as any,
+                            id_blog: key
+                        }));
+
+                        if (!title && blog_category) {
+                            result = [...data].filter((item: any) => {
+                                return item.blog_category.toLowerCase() == blog_category.toLowerCase();
+                            });
+                        };
+
+                        if (title && !blog_category) {
+                            result = [...data].filter((item: any) => {
+                                return item.title.toLowerCase().includes(title.toLowerCase());
+                            });
+                        };
+
+                        if (!title && !blog_category) {
+                            result = data;
+                        }
+                    };
+
+                    return result;
+                })
+            )
+    }
+
+    getById(id: string): Observable<any> {
+        return this._httpService.getRequest(`${environment.webApiUrl}/blog/${id}.json`);
     }
 
     create(payload: any): Observable<any> {

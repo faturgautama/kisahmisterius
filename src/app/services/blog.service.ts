@@ -18,12 +18,16 @@ export class BlogService {
         return this._httpService
             .getRequest(`${environment.webApiUrl}/blog.json`)
             .pipe(
-                map((obj: any) =>
-                    Object.entries(obj).map(([key, val]) => ({
-                        ...val as any,
-                        id_blog: key
-                    }))
-                )
+                map((obj: any) => {
+                    if (obj) {
+                        return Object.entries(obj).map(([key, val]) => ({
+                            ...val as any,
+                            id_blog: key
+                        }))
+                    } else {
+                        return [];
+                    }
+                })
             )
     }
 

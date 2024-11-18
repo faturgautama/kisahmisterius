@@ -18,12 +18,16 @@ export class BlogCategoryService {
         return this._httpService
             .getRequest(`${environment.webApiUrl}/blogCategory.json`)
             .pipe(
-                map((obj: any) =>
-                    Object.entries(obj).map(([key, val]) => ({
-                        ...val as any,
-                        id_blog_category: key
-                    }))
-                )
+                map((obj: any) => {
+                    if (obj) {
+                        return Object.entries(obj).map(([key, val]) => ({
+                            ...val as any,
+                            id_blog: key
+                        }))
+                    } else {
+                        return [];
+                    }
+                })
             )
     }
 

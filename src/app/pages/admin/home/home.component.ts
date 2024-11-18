@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { BlogCategoryModel } from '../../../model/blog-category.model';
 import { BlogModel } from '../../../model/blog.model';
 import { CommonModule } from '@angular/common';
+import { BlogCardsComponent } from '../../../components/blog-cards/blog-cards.component';
 
 @Component({
     selector: 'app-home',
@@ -28,7 +29,8 @@ import { CommonModule } from '@angular/common';
         InputTextModule,
         DropdownModule,
         EditorModule,
-        TableModule
+        TableModule,
+        BlogCardsComponent,
     ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
@@ -37,7 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     Destroy$ = new Subject();
 
-    PageState: 'category' | 'blog' = 'category';
+    PageState: 'category' | 'blog' = 'blog';
 
     FormState: 'insert' | 'update' = 'insert';
 
@@ -90,8 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             .getAll()
             .pipe(takeUntil(this.Destroy$))
             .subscribe((result) => {
-                console.log("result =>", result);
-                this.BlogCategoryDatasource = result;
+                this.BlogCategoryDatasource = result ? result : [];
             })
     }
 
@@ -100,7 +101,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             .getAll()
             .pipe(takeUntil(this.Destroy$))
             .subscribe((result) => {
-                this.BlogDatasource = result;
+                this.BlogDatasource = result ? result : [];
             })
     }
 
@@ -110,6 +111,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this.PageState == 'category') {
             this.ShowDialogFormBlogCategory = false;
         } else {
+            const imageEl = document.getElementById('imageEl') as HTMLInputElement;
+            imageEl.value = "";
+
             this.ShowDialogFormBlog = false;
         }
 
@@ -179,7 +183,34 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
     }
 
+    handleChangeImageBlog(args: any) {
+        const file = args.target.files[0];
+
+        if (file) {
+            if (file.size > 1048576) {
+                this._messageService.clear();
+                this._messageService.add({ severity: 'error', summary: 'Oops', detail: 'File size exceeds 1 MB' });
+            } else {
+                this.FormBlog.get('image')?.setValue("");
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    const base64string = reader.result as string;
+                    this.FormBlog.get('image')?.setValue(base64string);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
     handleSaveBlog(data: any) {
+        data.created_at = new Date();
+
+        const blog_category = this.BlogCategoryDatasource.find(item => item.id_blog_category == data.id_blog_category)?.blog_category;
+        data.blog_category = blog_category ? blog_category : '';
+
         this._blogService
             .create(data)
             .pipe(takeUntil(this.Destroy$))
@@ -202,6 +233,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     handleUpdateBlog(data: any) {
+        data.updated_at = new Date();
+
+        const blog_category = this.BlogCategoryDatasource.find(item => item.id_blog_category == data.id_blog_category)?.blog_category;
+        data.blog_category = blog_category ? blog_category : '';
+
         this._blogService
             .update(data)
             .pipe(takeUntil(this.Destroy$))
